@@ -1,0 +1,118 @@
+# StoryBundle + LoreBundle Examples (v1.3)
+
+These examples are designed to be copy/pasted into test fixtures.
+
+---
+
+## Example: LoreBundle (tiny)
+
+```json
+{
+  "id": "lore.rookhaven",
+  "version": "1.3.0",
+  "name": "Rookhaven Core Lore",
+  "races": [
+    { "id": "race.human", "name": "Human", "description": "Adaptable and ambitious.", "playable": true },
+    { "id": "race.elf", "name": "Elf", "description": "Long-lived and keen-eyed.", "playable": true, "traitIds": ["trait.lowLight"] }
+  ],
+  "traits": [
+    { "id": "trait.lowLight", "name": "Low-Light Vision", "description": "Can see in dim light." }
+  ],
+  "factions": [
+    {
+      "id": "faction.watch",
+      "name": "Rookhaven Watch",
+      "description": "The town guard and peacekeepers.",
+      "relationships": [{ "factionId": "faction.thieves", "stance": "enemy" }]
+    },
+    { "id": "faction.thieves", "name": "The Lanterns", "description": "A discreet thieves' guild." }
+  ],
+  "history": [
+    { "id": "event.foundings", "name": "Founding of Rookhaven", "description": "A frontier outpost became a town.", "era": "Early" }
+  ]
+}
+```
+
+---
+
+## Example: StoryBundle (tiny)
+
+```json
+{
+  "id": "story.rookhaven.intro",
+  "version": "1.3.0",
+  "name": "Rookhaven – The Missing Locket",
+  "loreRefs": [{ "id": "lore.rookhaven" }],
+  "ruleModules": [{ "id": "rules.core", "system": "Custom", "version": "1.0.0" }],
+  "world": {
+    "locations": [
+      {
+        "id": "loc.townSquare",
+        "name": "Town Square",
+        "type": "town",
+        "entryScene": "scene.square",
+        "layout": {
+          "layoutType": "nodeGraph",
+          "nodes": [
+            { "id": "n.square", "sceneId": "scene.square", "tags": ["market"] },
+            { "id": "n.tavern", "sceneId": "scene.tavern", "tags": ["tavern"] }
+          ],
+          "connections": [
+            { "from": "n.square", "to": "n.tavern", "direction": "north", "label": "Walk to the tavern" },
+            { "from": "n.tavern", "to": "n.square", "direction": "south", "label": "Return to the square" }
+          ]
+        }
+      }
+    ]
+  },
+  "story": {
+    "startScene": "scene.square",
+    "scenes": [
+      {
+        "id": "scene.square",
+        "title": "Rookhaven Town Square",
+        "locationId": "loc.townSquare",
+        "narrative": {
+          "text": [
+            { "text": "The square bustles with traders and gossip.", "weight": 2 },
+            { "text": "A cold wind skims across the cobbles.", "weight": 1, "condition": { "type": "flag", "key": "weather.cold", "operator": "equals", "value": true } }
+          ],
+          "loreRefs": [{ "type": "faction", "id": "faction.watch" }]
+        },
+        "actions": [
+          {
+            "id": "act.askGuard",
+            "label": "Ask the guard about the missing locket",
+            "condition": { "type": "flag", "key": "met.guard", "operator": "notEquals", "value": true },
+            "effects": [{ "type": "setFlag", "key": "met.guard", "value": true }],
+            "ruleHooks": [{ "type": "skillCheck", "payload": { "stat": "cha", "dc": 10 } }]
+          }
+        ],
+        "exits": [
+          { "label": "Go to the tavern", "targetScene": "scene.tavern" }
+        ]
+      },
+      {
+        "id": "scene.tavern",
+        "title": "The Bent Nail Tavern",
+        "locationId": "loc.townSquare",
+        "narrative": { "text": "Warmth and the smell of stew greet you." },
+        "ambience": {
+          "soundscape": { "id": "audio.tavernMurmur" },
+          "music": { "id": "audio.fiddle" },
+          "voice": { "mode": "partial", "scope": "keyLines" }
+        },
+        "exits": [
+          { "label": "Back to the square", "targetScene": "scene.square" }
+        ]
+      }
+    ]
+  },
+  "assets": [
+    { "id": "audio.tavernMurmur", "type": "audio", "path": "assets/audio/tavern_murmur.ogg" },
+    { "id": "audio.fiddle", "type": "audio", "path": "assets/audio/fiddle_loop.ogg" }
+  ]
+}
+```
+
+---

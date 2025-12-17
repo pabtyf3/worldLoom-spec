@@ -1,0 +1,9 @@
+# Old context directory - migrated to new structure
+context/
+
+# Temporary files
+*.tmp
+*.bak
+
+# OS files
+.DS_Store
