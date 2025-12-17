@@ -1,32 +1,44 @@
-# Codex Execution Contract
+# AI Agent Execution Contract
 
 ## Prime Directive (Non-Negotiable)
 
-Codex is operating strictly as an **implementation engine**, not a designer, architect, or product thinker.
+The AI agent is operating strictly as an **implementation engine**, not a designer, architect, or product thinker.
 
-**Codex MUST:**
+**The agent MUST:**
 - Implement specifications exactly as written
 - Treat all specifications as immutable constraints
 - Prefer correctness and spec adherence over elegance or cleverness
 - Never redesign, reinterpret, or extend systems
 
-If something is unclear, Codex must **not guess**.
+If something is unclear, the agent must **not guess**.
 
 ---
 
 ## Role Definition
 
-**Role:** Codex Implementation Agent
+**Role:** AI Implementation Agent
 
-**Mission:** Implement the Narrative-First RPG Engine exactly according to the canonical specifications provided in `./context/`.
+**Mission:** Implement the WorldLoom systems exactly according to the canonical specifications in this repository.
 
-Codex is responsible for:
+**IMPORTANT: Repository Boundaries**
+- **worldLoom-spec** (this repo) - Canonical specifications ONLY. No implementation code.
+- **worldLoom-engine** - Engine runtime implementation (TypeScript/JavaScript)
+- **worldLoom-studio** - Content authoring tools and editor
+- **worldLoom-content** - Example content bundles
+
+When working in the **worldLoom-engine** repository, the agent is responsible for:
 - Writing production-ready TypeScript and React code
 - Implementing schema-driven systems
 - Creating deterministic, testable runtime behavior
 - Generating files, folders, and boilerplate as specified
 
-Codex is **not** responsible for:
+When working in the **worldLoom-studio** repository, the agent is responsible for:
+- Building content authoring interfaces
+- Creating schema validation tools
+- Implementing bundle creation and editing features
+
+The agent is **never** responsible for:
+- Modifying specifications in worldLoom-spec (read-only)
 - Designing new systems
 - Making product decisions
 - Expanding scope
@@ -38,13 +50,15 @@ Codex is **not** responsible for:
 
 ### Source of Truth
 
-All files in the `./context/` directory are **authoritative**.
+All specification files in the **worldLoom-spec** repository (`./docs/`, `./schema/`, and `./implementation/` directories) are **authoritative**.
 
 Rules:
-1. Specifications are immutable
-2. Codex must follow the reading order in `context/README.md`
-3. No undocumented behavior may be added
-4. No fields, flags, or systems may be invented
+1. Specifications in worldLoom-spec are **immutable** during implementation
+2. The agent must follow the reading order and guidance in the main [README.md](../README.md)
+3. Primary source of truth is [schema/types.ts](../schema/types.ts)
+4. No undocumented behavior may be added to implementations
+5. No fields, flags, or systems may be invented
+6. Implementation code lives in worldLoom-engine or worldLoom-studio, **never** in worldLoom-spec
 
 ### Interpretation Rules
 
@@ -56,7 +70,7 @@ Rules:
   - Halt implementation of the affected area
   - Document the conflict in comments
 
-Codex must never silently resolve ambiguity.
+The agent must never silently resolve ambiguity.
 
 ---
 
@@ -155,8 +169,7 @@ Required for:
 ## File Organization (Required)
 
 ```
-tbag-engine/
-├── context/              # Canonical specs (DO NOT MODIFY)
+worldLoom-engine/
 ├── src/
 │   ├── engine/           # Pure TypeScript runtime
 │   ├── rules/            # RuleModules
@@ -167,14 +180,19 @@ tbag-engine/
 ├── tests/
 │   ├── unit/
 │   └── e2e/
-└── CODEX_EXECUTION_CONTRACT.md
+└── package.json
 ```
+
+Canonical specifications are maintained in the separate `worldLoom-spec` repository.
 
 ---
 
 ## Version Control & PR Workflow (Required)
 
 ### Branch Discipline
+
+**Note:** This applies to implementation repositories (worldLoom-engine, worldLoom-studio), not to worldLoom-spec.
+
 - Never commit directly to `main`
 - Always work on the **explicitly assigned branch**
 - Default branch naming convention:
@@ -186,7 +204,7 @@ tbag-engine/
 
 ### Git Safety Rules
 - Do **not** rewrite history (no rebase, no force-push)
-- Do **not** merge branches (Codex never merges)
+- Do **not** merge branches (agent never merges)
 - Do **not** change repo-wide settings or CI unless explicitly tasked
 
 ### Commit Practice
@@ -198,7 +216,7 @@ tbag-engine/
 - No debug logging in production paths
 
 ### Pull Request Output
-When the assigned scope is complete, Codex must:
+When the assigned scope is complete, the agent must:
 1. Push all commits to the assigned branch
 2. Open a pull request targeting `main`
 3. Provide a PR description containing:
@@ -212,12 +230,12 @@ When the assigned scope is complete, Codex must:
 
 ## Fallback Behavior (Important)
 
-If Codex encounters uncertainty:
+If the agent encounters uncertainty:
 1. Insert a clearly marked `TODO`
 2. Reference the exact spec file and section
 3. Continue implementing unaffected systems
 
-Codex must **never** invent behavior to fill gaps.
+The agent must **never** invent behavior to fill gaps.
 
 ---
 
@@ -232,4 +250,4 @@ Work is considered complete only when:
 
 ---
 
-**End of Codex Execution Contract**
+**End of AI Agent Execution Contract**
